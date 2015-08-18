@@ -72,6 +72,29 @@ var clearMentionAndUrl = function(data){
 	return words	
 }
 
+var splitSubData = function(data,callback){
+	var arr = data.replace(/\n/g," ").split(" ")
+	callback(null,arr)
+}
+
+var splitData = function(data,callback){
+	var d = []
+	var counter = 0
+	if (data.length == 0)
+		callback(new Error('data is empty'))
+		
+	data.forEach(function(element,index,array){
+		splitSubData(element,function(err,data){
+			d.push(data)
+			counter += 1
+		});
+		if (counter == data.length)
+			callback(null,d)
+	});
+}
+
 fetchTweets('semtinmayoru',20, function (l) {
-	console.log(clearMentionAndUrl(l))
+	splitData(clearMentionAndUrl(l),function(err, result){
+		console.log(result);
+	})
 });
