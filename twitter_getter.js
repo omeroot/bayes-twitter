@@ -57,19 +57,34 @@ var fetchTweets = function(user,count, callback){
 
 var clearMentionAndUrl = function(data){
 	var words = []
+	
 	for (var i in data){
+		var counter = 0
 		var arr = data[i].split(" ")
 		for (var j in arr){
 			var subArr = arr[j].split("")
-			if (subArr[0] != '@'){
-				words.push(data[i])
-				break
-			}else{
+			if (subArr[0] == '@' || isUrl( subArr )){
+				counter = 1
 				break
 			}
 		}
+		if ( counter == 0)
+			words.push(data[i])
 	}
 	return words	
+}
+
+var isUrl = function(word){
+	var first4 = [];
+	for (var j in word){
+		first4.push(word[j])
+		if(j == 3)
+			break
+	}
+	if( first4.join("") == "http")
+		return true
+	else
+		return false
 }
 
 var splitSubData = function(data,callback){
@@ -93,8 +108,13 @@ var splitData = function(data,callback){
 	});
 }
 
-fetchTweets('semtinmayoru',20, function (l) {
-	splitData(clearMentionAndUrl(l),function(err, result){
-		console.log(result);
-	})
+fetchTweets('semtinmayoru',400, function (l) {
+	var f = fs.createWriteStream(new Date().getTime()+".txt")
+	var clear = clearMentionAndUrl(l)
+	console.log(clear.length)
+	for( var i in clear ){
+		f.write(clear[i] + '\n')
+	}
+	f.end()
+	
 });
