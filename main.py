@@ -87,6 +87,6 @@ def testingNB(splitted):
 
 if __name__ == '__main__':
 	#dt,vec = loadDataSet();
-	testingNB(['amk','ate','fuck'])
+	testingNB(['orospu','poker,','zaman'])
 	
 	
