@@ -6,7 +6,8 @@ import codecs
 def loadDataSet():
 	filedir = "dataset/0.txt"
 	result = readFile(filedir)
-	print result
+	vector = [1,1,0,0,1,0,0,0,1,0,0,1,0,1,1,1,0,1,1,1,0,0,0,1,1,0,0,0,0,1,1,1,0,1,0,0,1,0,0,0,1,1,0,1,0,0,1,0,0,0,0,1,1,1]
+	return result,vector
 
 def createVocabList(dataset):
 	vocabs = set( [ ] )
@@ -85,7 +86,7 @@ def testingNB(splitted):
 	
 
 if __name__ == '__main__':
-	dt = loadDataSet();
-	#testingNB(['love','ate','fuck'])
+	#dt,vec = loadDataSet();
+	testingNB(['amk','ate','fuck'])
 	
 	

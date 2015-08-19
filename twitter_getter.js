@@ -48,7 +48,7 @@ var fetchTweets = function (user, count, callback) {
 	var tweets = []
 	client.get("statuses/user_timeline", conf, function (err, data, response) {
 		for (var i in data) {
-			var cData = data[i].text.replace(/\n/g," ")
+			var cData = data[i].text.replace(/\n/g, " ")
 			tweets.push(cData)
 		}
 		//if (tweets.length == 0) return callback(new Error('timeline is empty!' + " for " + user))
@@ -137,7 +137,7 @@ var dump = function () {
 		fetchTweets(element, 400, function (err, l) {
 			if (err) throw err
 			clearMentionAndUrl(l, function (err, data) {
-				var f = fs.createWriteStream("./dataset/" + index + ".txt",{encoding : "iso8859_9"})
+				var f = fs.createWriteStream("./dataset/" + index + ".txt", { encoding: "iso8859_9" })
 				console.log(data.length, element)
 				for (var i in data) {
 					f.write(data[i] + '\n')
