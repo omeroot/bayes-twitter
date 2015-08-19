@@ -48,7 +48,8 @@ var fetchTweets = function (user, count, callback) {
 	var tweets = []
 	client.get("statuses/user_timeline", conf, function (err, data, response) {
 		for (var i in data) {
-			tweets.push(data[i].text)
+			var cData = data[i].text.replace(/\n/g," ")
+			tweets.push(cData)
 		}
 		//if (tweets.length == 0) return callback(new Error('timeline is empty!' + " for " + user))
 		callback(null, tweets);
@@ -110,7 +111,7 @@ var splitData = function (data, callback) {
 
 var isHideFile = function (file) {
 	var reg = /(\.)/
-	var match = reg.exec( file )
+	var match = reg.exec(file)
 	if (match.index == 0)
 		return true
 	else
@@ -120,23 +121,23 @@ var isHideFile = function (file) {
 var clearDirectory = function (dir) {
 	var fList = fs.readdirSync(dir)
 	for (var f in fList)
-		if ( !isHideFile(fList[f]) ){
+		if (!isHideFile(fList[f])) {
 			fs.unlinkSync(dir + fList[f])
-			console.log(dir + fList[f],"deleted")
+			console.log(dir + fList[f], "deleted")
 		}
 		else
-			console.log(dir + fList[f],"is hidden")
+			console.log(dir + fList[f], "is hidden")
 	return true
 };
 
 var dump = function () {
 	var list = ["rabula_", "semtinmayoru", "fenasi_", "kontravolta_"]
-	list.forEach(function (element) {
+	list.forEach(function (element, index, array) {
 		console.log(element, "fetching...")
 		fetchTweets(element, 400, function (err, l) {
 			if (err) throw err
 			clearMentionAndUrl(l, function (err, data) {
-				var f = fs.createWriteStream("./dataset/" + new Date().getTime() + ".txt")
+				var f = fs.createWriteStream("./dataset/" + index + ".txt",{encoding : "iso8859_9"})
 				console.log(data.length, element)
 				for (var i in data) {
 					f.write(data[i] + '\n')
@@ -149,4 +150,4 @@ var dump = function () {
 };
 
 console.log(clearDirectory("dataset/"))
-//dump();
+dump();

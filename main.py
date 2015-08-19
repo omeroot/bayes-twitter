@@ -1,15 +1,12 @@
 # -*- coding: utf-8 -*-
+
 import numpy as np
+import codecs
 
 def loadDataSet():
-	postingList = [['my', 'dog', 'has', 'flea', 'problems', 'help', 'please'],
-							['maybe', 'not', 'take', 'him', 'to', 'dog', 'park', 'stupid'],
-							['my', 'dalmation', 'is', 'so', 'cute', 'I', 'love', 'him'],
-							['stop', 'posting', 'stupid', 'worthless', 'garbage','fuck'],
-							['mr', 'licks', 'ate', 'my', 'steak', 'how', 'to', 'stop', 'him'],
-							['quit', 'buying', 'worthless', 'dog', 'food', 'stupid','fuck']]
-	classVec = [0,1,0,1,0,1]
-	return postingList, classVec
+	filedir = "dataset/0.txt"
+	result = readFile(filedir)
+	print result
 
 def createVocabList(dataset):
 	vocabs = set( [ ] )
@@ -17,6 +14,22 @@ def createVocabList(dataset):
 		vocabs = vocabs|set( document )
 	return list(vocabs)
 	
+def readFile(fl):
+	f = codecs.open(fl, 'r', encoding='iso8859_9')
+	splitted = []
+	
+	for line in f.readlines():
+		#line = line.encode('utf8')
+		splitted.append(splitData(line))
+		
+	return splitted
+		 
+def splitData(sentence):
+	arr = sentence.split(" ")
+	for index,word in enumerate(arr):
+		arr[index] = word.encode('iso8859_9')
+	return arr
+
 def bagOfWords2Vec(vocabs, inputSet):
 	returnVec = [0] * len(vocabs)
 	
@@ -72,6 +85,7 @@ def testingNB(splitted):
 	
 
 if __name__ == '__main__':
-	testingNB(['love','ate','fuck'])
+	dt = loadDataSet();
+	#testingNB(['love','ate','fuck'])
 	
 	
