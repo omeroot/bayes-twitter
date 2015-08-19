@@ -63,7 +63,7 @@ var clearMentionAndUrl = function (data, callback) {
 		var arr = data[i].split(" ")
 		for (var j in arr) {
 			var subArr = arr[j].split("")
-			if (subArr[0] == '@' || isUrl(subArr)) {
+			if (subArr[0] == '@' || isUrl(subArr) || subArr[0] == '#') {
 				counter = 1
 				break
 			}
@@ -108,6 +108,27 @@ var splitData = function (data, callback) {
 	});
 };
 
+var isHideFile = function (file) {
+	var reg = /(\.)/
+	var match = reg.exec( file )
+	if (match.index == 0)
+		return true
+	else
+		return false
+};
+
+var clearDirectory = function (dir) {
+	var fList = fs.readdirSync(dir)
+	for (var f in fList)
+		if ( !isHideFile(fList[f]) ){
+			fs.unlinkSync(dir + fList[f])
+			console.log(dir + fList[f],"deleted")
+		}
+		else
+			console.log(dir + fList[f],"is hidden")
+	return true
+};
+
 var dump = function () {
 	var list = ["rabula_", "semtinmayoru", "fenasi_", "kontravolta_"]
 	list.forEach(function (element) {
@@ -116,7 +137,7 @@ var dump = function () {
 			if (err) throw err
 			clearMentionAndUrl(l, function (err, data) {
 				var f = fs.createWriteStream("./dataset/" + new Date().getTime() + ".txt")
-				console.log(data.length,element)
+				console.log(data.length, element)
 				for (var i in data) {
 					f.write(data[i] + '\n')
 				}
@@ -127,4 +148,5 @@ var dump = function () {
 	});
 };
 
-dump();
+console.log(clearDirectory("dataset/"))
+//dump();
